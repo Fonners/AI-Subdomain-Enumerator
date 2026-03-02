@@ -25,6 +25,8 @@ import subprocess
 import urllib.request
 from collections import Counter
 from pathlib import Path
+__version__ = "1.0.0"
+GITHUB_REPO  = "Fonners/AI-Subdomain-Enumerator" 
 
 # ─── Colour helpers ──────────────────────────────────────────────────────────
 RED    = "\033[91m"
@@ -60,6 +62,22 @@ def tool_exists(name: str) -> bool:
             os.environ["PATH"] = str(extra.parent) + os.pathsep + os.environ.get("PATH", "")
             return True
     return False
+
+def check_for_updates():
+    import json, urllib.request
+    try:
+        req = urllib.request.Request(
+            f"https://api.github.com/repos/{GITHUB_REPO}/releases/latest",
+            headers={"Accept": "application/vnd.github+json", "User-Agent": f"atlas/{__version__}"},
+        )
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            data = json.loads(resp.read().decode())
+        latest = data.get("tag_name", "").lstrip("v")
+        if latest and tuple(int(x) for x in latest.split(".")) > tuple(int(x) for x in __version__.split(".")):
+            print(f"\n\033[93m\033[1m[!] Update available: v{__version__} -> v{latest}\033[0m")
+            print(f"\033[93m[!] Run: sudo apt update && sudo apt upgrade atlas\033[0m\n")
+    except Exception:
+        pass
 
 def check_tools(args):
     required = []
@@ -560,6 +578,7 @@ def parse_args():
 
 def main():
     banner()
+    check_for_updates()
     args = parse_args()
     domain = args.domain.lower().strip()
 
