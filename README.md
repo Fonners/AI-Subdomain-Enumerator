@@ -6,6 +6,22 @@ A powerful subdomain enumeration tool that combines passive recon, AI prediction
 
 ---
 
+## ⚡ Quick Start
+```bash
+# 1. Install Atlas
+curl -fsSL https://raw.githubusercontent.com/Fonners/AI-Subdomain-Enumerator/main/install.sh | bash
+
+# 2. Set your Anthropic API key
+export ANTHROPIC_API_KEY=sk-ant-...
+
+# 3. Run it
+atlas -d example.com
+```
+
+That's it. Atlas will handle the rest.
+
+---
+
 ## ✨ Features
 
 | Module | What it does |
@@ -23,54 +39,86 @@ A powerful subdomain enumeration tool that combines passive recon, AI prediction
 
 ## 🚀 Installation
 
-### Python dependencies
+### Option 1 — One-liner (recommended)
+```bash
+curl -fsSL https://raw.githubusercontent.com/Fonners/AI-Subdomain-Enumerator/main/install.sh | bash
+```
+
+This downloads the latest release, installs it to `/usr/local/bin/atlas` so you can run it as a command from anywhere, and installs all Python dependencies automatically.
+
+### Option 2 — Manual
+
+**Python dependencies**
 ```bash
 pip install requests html2text nltk subwiz anthropic --break-system-packages
 ```
 
-### Go tools
+**Go tools**
 ```bash
 go install github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
 go install github.com/d3mondev/puredns/v2@latest
 go install github.com/projectdiscovery/httpx/cmd/httpx@latest
 ```
 
-### API key
+**API key**
 ```bash
 export ANTHROPIC_API_KEY=sk-ant-...
+```
+
+To make the API key permanent, add the export line to your `~/.bashrc` or `~/.zshrc`.
+
+---
+
+## 🔄 Staying Up to Date
+
+Atlas automatically checks for updates every time you run it. If a newer version is available you'll see this before the tool runs:
+```
+╔══════════════════════════════════════════════════════╗
+║  Update available!  v1.0.0  ->  v1.1.0               ║
+║  Run: sudo apt update && sudo apt upgrade atlas      ║
+║  Or:  pip install --upgrade atlas                    ║
+╚══════════════════════════════════════════════════════╝
+```
+
+The tool then continues running as normal — the warning never blocks you. If you're up to date, nothing is shown. If you have no internet, the check is silently skipped.
+
+To check your current version at any time:
+```bash
+atlas --version
 ```
 
 ---
 
 ## 🛠️ Usage
-
 ```bash
-python3 atlas.py -d example.com
+atlas -d example.com
 ```
 
 ### Common examples
-
 ```bash
 # Basic run against a target
-python3 atlas.py -d example.com
+atlas -d example.com
 
 # Custom output directory
-python3 atlas.py -d example.com -o ./results
+atlas -d example.com -o ./results
 
 # Increase the final wordlist cap (default: 5000)
-python3 atlas.py -d example.com --wordlist-max 10000
+atlas -d example.com --wordlist-max 10000
 
 # Tighten the mutation engine budget (default: 2000)
-python3 atlas.py -d example.com --mutation-budget 500
+atlas -d example.com --mutation-budget 500
 
 # Only generate the wordlist — skip DNS resolution
-python3 atlas.py -d example.com --wordlist-only
+atlas -d example.com --wordlist-only
 
 # Pass your API key inline instead of via env var
-python3 atlas.py -d example.com -k sk-ant-...
+atlas -d example.com -k sk-ant-...
 
 # Skip specific steps
-python3 atlas.py -d example.com --no-llm --no-subwiz
+atlas -d example.com --no-llm --no-subwiz
+
+# Check your installed version
+atlas --version
 ```
 
 ---
@@ -87,6 +135,7 @@ python3 atlas.py -d example.com --no-llm --no-subwiz
 | `--mutation-budget` | `2000` | Max entries the mutation engine may add |
 | `--subwiz-timeout` | `300` | Timeout in seconds for SubWiz |
 | `--wordlist-only` | `false` | Stop after wordlist, skip DNS |
+| `--version` | — | Print current version and exit |
 | `--no-subfinder` | — | Skip subfinder |
 | `--no-subwiz` | — | Skip SubWiz |
 | `--no-scrape` | — | Skip web scraping |
@@ -121,7 +170,7 @@ Instead of generating millions of permutations like alterx can, the built-in mut
 
 ## 📁 Output files
 
-All files are written to the output directory (`atlas_<domain>/` by default):
+All files are written to `atlas_<domain>/` by default:
 
 | File | Contents |
 |---|---|
