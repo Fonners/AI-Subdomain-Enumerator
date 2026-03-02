@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -e
-REPO="yourusername/atlas"
+REPO="Fonners/AI-Subdomain-Enumerator"
 LATEST=$(curl -fsSL "https://api.github.com/repos/${REPO}/releases/latest" | grep '"tag_name"' | cut -d'"' -f4)
 echo "[*] Installing Atlas ${LATEST}..."
 curl -fsSL "https://github.com/${REPO}/releases/download/${LATEST}/atlas.py" -o /tmp/atlas.py
